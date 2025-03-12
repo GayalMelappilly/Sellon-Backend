@@ -1,16 +1,17 @@
 import { Request, Response } from "express"
 import client from "../config/database"
-import { hashPassword } from "../utils/hastPasswords";
-import { signUpUserQuery } from "../query/user.query";
+import { hashPassword } from "../utils/bcryptUtil";
+import { loginUserQuery, signUpUserQuery } from "../query/user.query";
 
 export const signUpUser = async (req: Request, res: Response) => {
+
     const user = req.body
 
     const hashedPassword = await hashPassword(user.password)
     console.log("HASHED PASSWORD : ",hashedPassword)
 
     try{
-        const result = await client.query(signUpUserQuery, [
+        await client.query(signUpUserQuery, [
             user.first_name, 
             user.last_name, 
             user.email, 
@@ -33,9 +34,21 @@ export const signUpUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
     
-    // const query = `
-        
-    // `
+    const loginDetails = req.body
+
+    try{
+        const result = await client.query(loginUserQuery, [
+            loginDetails.identifier
+        ])
+
+        if(result.rows.length > 0){
+            const user = result.rows[0]
+            // const isMatch = await bcrypt
+        }
+
+    }catch (err) {
+
+    }
 
 }
 

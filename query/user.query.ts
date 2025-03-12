@@ -6,5 +6,6 @@ export const signUpUserQuery = `
 
 export const loginUserQuery = `
     SELECT * FROM user
-    WHERE username $1 AND password = $2
+    WHERE (username = $1 OR email = $1 OR phone_number = $1)
+    AND password = $2;
 `
