@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import client from "../config/database"
-import { hashPassword } from "../utils/bcryptUtil";
+import { hashPassword, matchPassword } from "../utils/bcryptUtil";
 import { loginUserQuery, signUpUserQuery } from "../query/user.query";
 
 export const signUpUser = async (req: Request, res: Response) => {
@@ -8,7 +8,6 @@ export const signUpUser = async (req: Request, res: Response) => {
     const user = req.body
 
     const hashedPassword = await hashPassword(user.password)
-    console.log("HASHED PASSWORD : ",hashedPassword)
 
     try{
         await client.query(signUpUserQuery, [
@@ -22,9 +21,11 @@ export const signUpUser = async (req: Request, res: Response) => {
             user.avatar, 
             user.status
         ])
-        console.log("Added new user")
     }catch (err) {
         console.log("Error inserting user : ",err)
+        res.status(500).json({
+            message: 'Error inserting user'
+        })
     }
 
     res.status(201).send({
@@ -43,11 +44,30 @@ export const loginUser = async (req: Request, res: Response) => {
 
         if(result.rows.length > 0){
             const user = result.rows[0]
-            // const isMatch = await bcrypt
+            const isMatch = await matchPassword(loginDetails.password, user.password)
+            if(isMatch){
+                console.log("User logged in")
+                res.status(201).json({
+                    message: "User logged in successfully"
+                })
+            }else{
+                console.log("Invalid password")
+                res.status(500).json({
+                    message: "Invalid password"
+                })
+            }
+
+        }else{
+            res.status(500).json({
+                message: 'User not found'
+            })
         }
 
     }catch (err) {
-
+        console.log(err)
+        res.status(500).json({
+            message: "Error fetching user details"
+        })
     }
 
 }
