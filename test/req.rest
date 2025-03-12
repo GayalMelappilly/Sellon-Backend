@@ -40,3 +40,7 @@ Content-Type: application/json
     "avatar": "benjamin.png",
     "status": "active"
 }
+
+### Email verification
+
+GET http://localhost:3000/api/v1/verify-user-with-email/email?email=gayalsunil@gmail.com

@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import client from "../config/database"
 import { hashPassword, matchPassword } from "../utils/bcryptUtil";
 import { loginUserQuery, signUpUserQuery, updateUserProfileQuery } from "../query/user.query";
+import { sendVerificationMail } from "../utils/nodemailerUtil";
 
 export const signUpUser = async (req: Request, res: Response) => {
 
@@ -119,10 +120,16 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 
 export const verifyUserWithEmail = async (req: Request, res: Response) => {
 
-    const email = req.params.body
+    const email = req.query.email as string
+
+    console.log("EMAIL : ",email)
 
     try{
-        
+        await sendVerificationMail(email).then(()=>{
+            console.log("Email sent!")
+        }).catch((err)=>{
+            console.log(err)
+        })
     }catch(err){
         res.status(500).json({
             message: "An error occured while sending verification mail"

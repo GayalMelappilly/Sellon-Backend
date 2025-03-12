@@ -4,7 +4,7 @@ import { getAllUsers, signUpUser, loginUser, updateUserProfile, verifyUserWithEm
 const userRouter = express.Router()
 
 userRouter.post('/sign-up', signUpUser)
-userRouter.get('/verify-user-with-email/:email', verifyUserWithEmail)
+userRouter.get('/verify-user-with-email/email', verifyUserWithEmail)
 userRouter.get('/verify-user-with-otp/:phone_number', verifyUserWithPhoneNumber)
 userRouter.post('/login', loginUser)
 userRouter.get('/get-all-users', getAllUsers)
