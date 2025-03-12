@@ -1,0 +1,19 @@
+###
+POST http://localhost:3000/api/v1/sign-up/
+Content-Type: application/json
+
+{
+    "first_name": "Alok",
+    "last_name": "Xavier",
+    "email": "alokxavier@gmail.com",
+    "password": "12345678",
+    "phone_number": "9819232343",
+    "role": "customer",
+    "address": "Muringoor, Thrissur",
+    "avatar": "alok.png",
+    "status": "active"
+}
+
+###
+
+GET http://localhost:3000/api/v1/get-all-users
