@@ -1,29 +1,42 @@
-###
+### User signup
 POST http://localhost:3000/api/v1/sign-up/
 Content-Type: application/json
 
 {
-    "first_name": "Alok",
-    "last_name": "Xavier",
-    "email": "alokxavier@gmail.com",
+    "first_name": "Benjamin",
+    "last_name": "James",
+    "email": "benju@gmail.com",
     "password": "12345678",
-    "phone_number": "9819232343",
+    "phone_number": "9188429571",
     "role": "customer",
-    "address": "Muringoor, Thrissur",
-    "avatar": "alok.png",
+    "address": "Koratty, Thrissur",
+    "avatar": "benju.png",
     "status": "active"
 }
 
-###
-
-GET http://localhost:3000/api/v1/get-all-users
-
-###
-
+### User login
 POST http://localhost:3000/api/v1/login/
 Content-Type: application/json
 
 {
     "identifier": "alokxavier@gmail.com",
     "password":"12345678"
+}
+
+### Get all users
+GET http://localhost:3000/api/v1/get-all-users
+
+### Update user
+
+PUT http://localhost:3000/api/v1/update-user-profile/20
+Content-Type: application/json
+
+{
+    "first_name": "Benjamin",
+    "last_name": "James",
+    "email": "benju@gmail.com",
+    "role": "seller",
+    "address": "Konoor, Thrissur",
+    "avatar": "benjamin.png",
+    "status": "active"
 }
