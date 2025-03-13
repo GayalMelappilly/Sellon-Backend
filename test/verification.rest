@@ -10,3 +10,7 @@ Content-Type: application/json
     "otp": "832501",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvdHAiOiI4MzI1MDEiLCJpYXQiOjE3NDE4NTgwNDksImV4cCI6MTc0MTg1ODM0OX0.khi57BwDJxE70cARdiGkv1JZJy_-Tss97BpzacAdXJ4"
 }
+
+### Phone number verification
+
+GET http://localhost:3000/api/v1/verify-user-with-otp/phone_number?phone_number=9567564984

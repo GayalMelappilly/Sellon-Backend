@@ -33,3 +33,6 @@ out/
 # Misc
 coverage/
 *.swp
+
+# Firebase service account key
+firebase-config/
