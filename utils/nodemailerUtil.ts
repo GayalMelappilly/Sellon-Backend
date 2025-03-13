@@ -14,24 +14,20 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-export const sendVerificationMail = async (email: string) => {
+export const sendVerificationMail = async (email: string, name: string, verificationCode: number) => {
 
     const templatePath = path.join(__dirname, '../views/mails/verification-mail.ejs')
 
     const html = await ejs.renderFile(templatePath, {
-        email: email
+        name: name,
+        code: verificationCode
     })
-
-    console.log(email)
 
     const mailOptions = {
         from: process.env.SMTP_MAIL_ID,
         to: email,
         subject: 'Welcome!',
-        html,
-        context: {
-            email: email
-        }
+        html
     }
 
     transporter.sendMail(mailOptions, (error, info) => {

@@ -3,6 +3,7 @@ import client from "../config/database"
 import { hashPassword, matchPassword } from "../utils/bcryptUtil";
 import { loginUserQuery, signUpUserQuery, updateUserProfileQuery } from "../query/user.query";
 import { sendVerificationMail } from "../utils/nodemailerUtil";
+import { generateOtpToken, verifyOtpToken } from "../utils/jwtUtil";
 
 export const signUpUser = async (req: Request, res: Response) => {
 
@@ -121,12 +122,18 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 export const verifyUserWithEmail = async (req: Request, res: Response) => {
 
     const email = req.query.email as string
+    const name = email.split('@')[0]
+    const verificationOtp = Math.floor(100000 + Math.random() * 900000)
 
-    console.log("EMAIL : ",email)
+    const token = generateOtpToken(verificationOtp.toString())
 
     try{
-        await sendVerificationMail(email).then(()=>{
+        await sendVerificationMail(email, name, verificationOtp).then(()=>{
             console.log("Email sent!")
+            res.status(201).json({
+                message: 'Email sent',
+                token: token
+            })
         }).catch((err)=>{
             console.log(err)
         })
@@ -135,6 +142,31 @@ export const verifyUserWithEmail = async (req: Request, res: Response) => {
             message: "An error occured while sending verification mail"
         })
     }
+
+}
+
+export const verifyEmailOtp = async (req: Request, res: Response) => {
+
+    const {otp, token} = req.body 
+
+    try{
+        const storedOtp = verifyOtpToken(token)
+
+        if (storedOtp === otp){
+            res.status(200).json({
+                message: 'Email verified'
+            })
+        }else{
+            res.status(400).json({
+                message: 'Invalid OTP'
+            })
+        }
+    }catch(err){
+        res.status(400).json({
+            message: err
+        })
+    }
+    
 
 }
 
