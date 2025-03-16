@@ -9,6 +9,6 @@ userRouter.post('/verify-user-with-email/', verifyEmailOtp)
 userRouter.get('/verify-user-with-otp/phone_number', verifyUserWithPhoneNumber)
 userRouter.post('/login', loginUser)
 userRouter.get('/get-all-users', getAllUsers)
-userRouter.put('/update-user-profile/:id', updateUserProfile)
+userRouter.put('/update-user-profile/:id', updateUserProfile) 
 
 export default userRouter

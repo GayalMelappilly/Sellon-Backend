@@ -21,3 +21,10 @@ export const verifyOtpToken = (token: string) => {
         throw new Error('Invalid token')
     }
 }
+
+// Token for user
+export const generateUserToken = (id: string) => {
+    return jwt.sign({id}, secretKey, {
+        expiresIn: '7d'
+    })
+} 

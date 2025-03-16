@@ -2,7 +2,6 @@
 GET http://localhost:3000/api/v1/verify-user-with-email/email?email=gayalsunil@gmail.com
 
 ### Verify email otp
-
 POST http://localhost:3000/api/v1/verify-user-with-email/
 Content-Type: application/json
 
@@ -12,5 +11,4 @@ Content-Type: application/json
 }
 
 ### Phone number verification
-
-GET http://localhost:3000/api/v1/verify-user-with-otp/phone_number?phone_number=9567564984
+GET http://localhost:3000/api/v1/verify-user-with-otp/phone_number?phone_number=9446994984
