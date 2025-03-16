@@ -21,3 +21,9 @@ export const updateUserProfileQuery = `
     SET first_name = $1, last_name = $2, email = $3, address = $4, role = $5, avatar = $6
     WHERE id = $7;
 `
+
+// Get current user
+export const getCurrentUserQuery = `
+    SELECT * FROM users
+    WHERE id = $1
+`

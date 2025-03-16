@@ -11,4 +11,4 @@ Content-Type: application/json
 }
 
 ### Phone number verification
-GET http://localhost:3000/api/v1/verify-user-with-otp/phone_number?phone_number=9446994984
+GET http://localhost:3000/api/v1/verify-user-with-otp/phone_number?phone_number=9567564984
