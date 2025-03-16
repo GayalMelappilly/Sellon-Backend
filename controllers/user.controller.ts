@@ -104,11 +104,8 @@ export const loginUser = async (req: Request, res: Response):Promise<void> => {
 
 export const logoutUser = async (req: Request, res: Response): Promise<void> => {
     try {
-        res.clearCookie('token', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-        })
+        res.cookie('access_token', '', { maxAge: 1 })
+        res.cookie('refresh_token', '', { maxAge: 1 })
 
         res.status(200).json({
             message: 'User logged out'
