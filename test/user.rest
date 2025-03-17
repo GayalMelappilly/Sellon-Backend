@@ -19,7 +19,7 @@ POST http://localhost:3000/api/v1/login/
 Content-Type: application/json
 
 {
-    "identifier": "matta@gmail.com",
+    "identifier": "absalmatta@gmail.as",
     "password":"12345678"
 }
 
@@ -35,16 +35,16 @@ GET http://localhost:3000/api/v1/get-all-users
 GET http://localhost:3000/api/v1/get-current-user
 
 ### Update user
-PUT http://localhost:3000/api/v1/update-user-profile/20
+PUT http://localhost:3000/api/v1/update-user-profile/22
 Content-Type: application/json
 
 {
-    "first_name": "Benjamin",
-    "last_name": "James",
-    "email": "benju@gmail.com",
+    "first_name": "Absal",
+    "last_name": "Antu",
+    "email": "absalmatta@latvia.com",
     "role": "seller",
-    "address": "Konoor, Thrissur",
-    "avatar": "benjamin.png",
+    "address": "Latvia",
+    "avatar": "matta.png",
     "status": "active"
 }
 

@@ -8,6 +8,8 @@ import admin from "../utils/firebaseAdmin";
 import { auth } from "firebase-admin";
 import { FirebaseAppError } from "firebase-admin/app";
 import { configDotenv } from "dotenv";
+import { redis } from "../config/redis";
+import { UserModel } from "../models/user.model";
 configDotenv()
 
 export const signUpUser = async (req: Request, res: Response):Promise<void> => {
@@ -98,13 +100,13 @@ export const loginUser = async (req: Request, res: Response):Promise<void> => {
 export const logoutUser = async (req: Request, res: Response):Promise<void> => {
     try {
 
-        const userId = decodeToken(req.cookies.access_token)
-        console.log(userId?.id)
+        const decodedToken = decodeToken(req.cookies.access_token)
+        const userId = decodedToken?.id
 
         res.cookie('access_token', '', { maxAge: 1 })
         res.cookie('refresh_token', '', { maxAge: 1 })
-
         
+        redis.del(userId)
 
         res.status(200).json({
             message: 'User logged out'
@@ -121,8 +123,8 @@ export const logoutUser = async (req: Request, res: Response):Promise<void> => {
 
 export const updateUserProfile = async (req: Request, res: Response):Promise<void> => {
     
-    const userId = req.params.id
-    const userUpdatedData = req.body
+    const userId = req.params.id as string
+    const userUpdatedData = req.body as UserModel
     
     try {
         await client.query(updateUserProfileQuery, [
@@ -134,6 +136,12 @@ export const updateUserProfile = async (req: Request, res: Response):Promise<voi
             userUpdatedData.avatar,
             userId
         ])
+
+        await redis.set(userId, JSON.stringify(userUpdatedData) as any, 'EX', 604800).then(()=>{
+            console.log('updated cache')
+        }).catch((err)=>{
+            console.log("Cache update error : ",err)
+        })
         
         res.status(201).json({
             message: 'User updated successfully'

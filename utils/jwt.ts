@@ -65,7 +65,7 @@ export const sendTokens = (id: string, user: UserModel, res: Response) => {
 }
 
 // Update access toke and refresh token
-export const updateTokens = (id: string, user: UserModel, res: Response, next: NextFunction) => {
+export const updateTokens = async (id: string, user: UserModel, res: Response, next: NextFunction) => {
     const accessToken = jwt.sign({id, user}, secretKey, {
         expiresIn: '5m'
     })
@@ -91,6 +91,8 @@ export const updateTokens = (id: string, user: UserModel, res: Response, next: N
         maxAge: refreshTokenExpire * 24 * 60 * 60 * 1000,
         expires: new Date(Date.now() + accessTokenExpire * 1000)
     })
+
+    await redis.set(id, JSON.stringify(user), 'EX', 604800)
 
     next();
 }
