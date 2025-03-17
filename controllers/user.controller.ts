@@ -1,16 +1,16 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import client from "../config/database"
 import { hashPassword, matchPassword } from "../utils/bcrypt";
 import { getCurrentUserQuery, loginUserQuery, signUpUserQuery, updateUserProfileQuery } from "../query/user.query";
 import { sendVerificationMail } from "../utils/nodemailer";
-import { decodeToken, generateOtpToken, generateUserToken, sendTokens, verifyOtpToken } from "../utils/jwt";
+import { decodeToken, generateOtpToken, sendTokens, updateTokens, verifyOtpToken, verifyToken } from "../utils/jwt";
 import admin from "../utils/firebaseAdmin";
 import { auth } from "firebase-admin";
 import { FirebaseAppError } from "firebase-admin/app";
 import { configDotenv } from "dotenv";
 configDotenv()
 
-export const signUpUser = async (req: Request, res: Response) => {
+export const signUpUser = async (req: Request, res: Response):Promise<void> => {
 
     const user = req.body
 
@@ -29,25 +29,18 @@ export const signUpUser = async (req: Request, res: Response) => {
             user.status
         ])
 
-        const token = generateUserToken(result.rows[0].id)
-
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            maxAge: 1000 * 60 * 60 * 24 * 7
+        res.status(201).send({
+            message: `USER CREDS : ${user}`
         })
+        return;
 
     } catch (err) {
         console.log("Error inserting user : ", err)
         res.status(500).json({
             message: 'Error inserting user'
         })
+        return;
     }
-
-    res.status(201).send({
-        message: `USER CREDS : ${user}`
-    })
 }
 
 export const loginUser = async (req: Request, res: Response):Promise<void> => {
@@ -102,7 +95,7 @@ export const loginUser = async (req: Request, res: Response):Promise<void> => {
 
 }
 
-export const logoutUser = async (req: Request, res: Response): Promise<void> => {
+export const logoutUser = async (req: Request, res: Response):Promise<void> => {
     try {
         res.cookie('access_token', '', { maxAge: 1 })
         res.cookie('refresh_token', '', { maxAge: 1 })
@@ -110,17 +103,17 @@ export const logoutUser = async (req: Request, res: Response): Promise<void> => 
         res.status(200).json({
             message: 'User logged out'
         })
-        return
+        return;
 
     } catch (err) {
         res.status(500).json({
             message: "Logout error"
         })
-        return
+        return;
     }
 }
 
-export const updateUserProfile = async (req: Request, res: Response) => {
+export const updateUserProfile = async (req: Request, res: Response):Promise<void> => {
     
     const userId = req.params.id
     const userUpdatedData = req.body
@@ -139,15 +132,17 @@ export const updateUserProfile = async (req: Request, res: Response) => {
         res.status(201).json({
             message: 'User updated successfully'
         })
+        return;
     } catch (err) {
         console.log('User update error', err)
         res.status(500).json({
             message: 'User update error'
         })
+        return;
     }
 }
 
-export const verifyUserWithEmail = async (req: Request, res: Response) => {
+export const verifyUserWithEmail = async (req: Request, res: Response):Promise<void> => {
     
     const email = req.query.email as string
     const name = email.split('@')[0]
@@ -162,21 +157,24 @@ export const verifyUserWithEmail = async (req: Request, res: Response) => {
                 message: 'Email sent',
                 token: token
             })
+            return;
         }).catch((err) => {
             console.log(err)
             res.status(500).json({
                 message: 'An error occured while mail'
             })
+            return;
         })
     } catch (err) {
         res.status(500).json({
             message: "An error occured while sending verification mail"
         })
+        return;
     }
     
 }
 
-export const verifyEmailOtp = async (req: Request, res: Response) => {
+export const verifyEmailOtp = async (req: Request, res: Response):Promise<void> => {
     
     const { otp, token } = req.body
     
@@ -187,15 +185,18 @@ export const verifyEmailOtp = async (req: Request, res: Response) => {
             res.status(200).json({
                 message: 'Email verified'
             })
+            return;
         } else {
             res.status(400).json({
                 message: 'Invalid OTP'
             })
+            return;
         }
     } catch (err) {
         res.status(400).json({
             message: err
         })
+        return;
     }
     
     
@@ -254,7 +255,7 @@ export const verifyUserWithPhoneNumber = async (req: Request, res: Response):Pro
     }
 }
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (req: Request, res: Response):Promise<void> => {
 
     try {
         const result = await client.query(updateUserProfileQuery)
@@ -263,12 +264,14 @@ export const getAllUsers = async (req: Request, res: Response) => {
             message: 'Fetched all users',
             data: result.rows
         })
+        return;
     } catch (err) {
         console.log('Error while fetching all users : ', err)
         res.status(500).json({
             message: 'Error while fetching all users',
             error: err
         })
+        return;
     }
 }
 
@@ -291,6 +294,34 @@ export const getCurrentUser = async (req: Request, res: Response):Promise<void> 
             message: 'Error while fetching current user'
         })
         return
+    }
+
+}
+
+export const updateAccessToken = async (req: Request, res: Response, next: NextFunction) => {
+    
+    try{
+        const refreshToken = req.cookies.refresh_token as string
+        const decodedToken = verifyToken(refreshToken)
+
+        console.log("UPDATED TOKEN")
+
+        if(!decodedToken){
+            res.status(401).json({
+                message: 'Token expired, login again'
+            })
+        }
+
+        const userId = decodedToken?.id
+        const userDetails = decodedToken?.user
+        console.log(userId, userDetails)
+
+        updateTokens(userId, userDetails, res, next)
+
+    }catch(err: unknown){
+        res.status(401).json({
+            message: 'Token expired, login again'
+        })
     }
 
 }

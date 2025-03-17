@@ -1,5 +1,6 @@
 import express from 'express'
-import { getAllUsers, signUpUser, loginUser, updateUserProfile, verifyUserWithEmail, verifyUserWithPhoneNumber, verifyEmailOtp, logoutUser, getCurrentUser } from '../controllers/user.controller'
+import { getAllUsers, signUpUser, loginUser, updateUserProfile, verifyUserWithEmail, verifyUserWithPhoneNumber, verifyEmailOtp, logoutUser, getCurrentUser, updateAccessToken } from '../controllers/user.controller'
+import { isAuthenticated } from '../middlewares/auth'
 
 const userRouter = express.Router()
 
@@ -8,9 +9,9 @@ userRouter.get('/verify-user-with-email/email', verifyUserWithEmail)
 userRouter.post('/verify-user-with-email/', verifyEmailOtp)
 userRouter.get('/verify-user-with-otp/phone_number', verifyUserWithPhoneNumber)
 userRouter.post('/login', loginUser)
-userRouter.get('/logout', logoutUser)
+userRouter.get('/logout', isAuthenticated, logoutUser)
 userRouter.get('/get-all-users', getAllUsers)
-userRouter.get('/get-current-user', getCurrentUser)
-userRouter.put('/update-user-profile/:id', updateUserProfile) 
+userRouter.get('/get-current-user', isAuthenticated, updateAccessToken, getCurrentUser)
+userRouter.put('/update-user-profile/:id', isAuthenticated, updateUserProfile) 
 
 export default userRouter

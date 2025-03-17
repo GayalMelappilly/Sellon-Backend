@@ -8,15 +8,3 @@ export interface UserModel {
     avatar: string,
     status: 'active' | 'inactive'
 }
-
-// {
-//     "first_name": "Absal",
-//     "last_name": "Antu",
-//     "email": "matta@gmail.com",
-//     "password": "12345678",
-//     "phone_number": "9188439124",
-//     "role": "customer",
-//     "address": "Koratty, Thrissur",
-//     "avatar": "matta.png",
-//     "status": "active"
-// }
