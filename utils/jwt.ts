@@ -2,6 +2,7 @@ import jwt, { decode } from 'jsonwebtoken'
 import { configDotenv } from 'dotenv'
 import { UserModel } from '../models/user.model'
 import { NextFunction, Response } from 'express'
+import { redis } from '../config/redis'
 configDotenv()
 
 const secretKey = process.env.JWT_SECRET_KEY as string
@@ -32,6 +33,9 @@ export const sendTokens = (id: string, user: UserModel, res: Response) => {
     const refreshToken = jwt.sign({id, user}, secretKey, {
         expiresIn: '3d'
     })
+
+    // upload session to redis 
+    redis.set(id, JSON.stringify(user) as any)
 
     const accessTokenExpire = parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRE || '300', 10)
     const refreshTokenExpire = parseInt(process.env.JWT_REFRESH_TOKEN_EXPIRE || '1200', 10)

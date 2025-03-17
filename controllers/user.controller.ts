@@ -97,8 +97,14 @@ export const loginUser = async (req: Request, res: Response):Promise<void> => {
 
 export const logoutUser = async (req: Request, res: Response):Promise<void> => {
     try {
+
+        const userId = decodeToken(req.cookies.access_token)
+        console.log(userId?.id)
+
         res.cookie('access_token', '', { maxAge: 1 })
         res.cookie('refresh_token', '', { maxAge: 1 })
+
+        
 
         res.status(200).json({
             message: 'User logged out'
