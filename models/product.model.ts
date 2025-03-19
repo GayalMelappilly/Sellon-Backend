@@ -9,8 +9,8 @@ export interface ProductModel {
     sku?: string,
     weight?: number,
     dimensions?: string,
-    color?: string,
-    size?: string,
+    color?: Array<string>,
+    size?: Array<string>,
     material?: string,
     condition?: string,
     status: string,
@@ -18,5 +18,4 @@ export interface ProductModel {
     rating?: number,
     total_reviews?: number,
     sold_count?: number,
-    available_from?: Date
 }

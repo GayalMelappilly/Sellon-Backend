@@ -3,18 +3,19 @@ POST http://localhost:3000/api/v1/add-product/
 Content-Type: application/json
 
 {
-    "name": "Arthur Morgan Action Figure",
-    "description": "Arthur Morgan from Red Dead Redemption 2",
-    "price": 59,
-    "discount_price": 36,
-    "stock_quantity": 240,
-    "category_id": 251,
-    "brand": "Rockstar Games",
-    "sku": "eqeqwiusdfoidsfxvcxvnk",
-    "weight": "0.7",
-    "dimensions": "10 x 5 x 2 cm",
-    "color": "Golden",
-    "material": "Metal",
+    "name": "Nike Jordan 5",
+    "description": "Nike Jordan series 5",
+    "price": 199,
+    "discount_price": 159,
+    "stock_quantity": 22,
+    "category_id": 206,
+    "brand": "Nike",
+    "sku": "eqeqwiuasdsdfoidsfxvcxvnk",
+    "weight": "0.4",
+    "dimensions": null,
+    "color": ["Red", "Black", "Green"],
+    "size": ["6", "7", "8", "9"],
+    "material": null,
     "condition": "New",
     "status": "ACTIVE",
     "image_urls": [{
@@ -25,7 +26,7 @@ Content-Type: application/json
             "view3.png"
         ]
     }], 
-    "rating": null,
-    "total_reviews": null,
-    "sold_count": null
+    "rating": 4.3,
+    "total_reviews": 20,
+    "sold_count": 43
 }

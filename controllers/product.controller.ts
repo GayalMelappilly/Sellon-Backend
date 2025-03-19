@@ -2,10 +2,18 @@ import { Request, Response } from "express"
 import { ProductModel } from "../models/product.model"
 import client from "../config/database"
 import { addProductQuery, getCategoriesQuery, getSubcategoriesQuery } from "../query/product.query"
+import { getUserCache } from "../utils/redis"
 
 export const addProduct = async (req: Request, res: Response) => {
-    const productDetails: ProductModel = req.body
-    console.log(productDetails)
+    
+    const productDetails = req.body as ProductModel
+    const user = await getUserCache(req.cookies.access_token)
+    const sellerDetails = {
+        id: user.id,
+        name: user.first_name.concat(" "+user.last_name),
+        avatar: user.avatar
+    }
+    // console.log(productDetails, sellerDetails)
     try{
         await client.query(addProductQuery, [
             productDetails.name,
@@ -26,7 +34,8 @@ export const addProduct = async (req: Request, res: Response) => {
             productDetails.image_urls,
             productDetails.rating,
             productDetails.total_reviews,
-            productDetails.sold_count
+            productDetails.sold_count,
+            sellerDetails
         ])
         res.status(201).json({
             success: true,
@@ -34,6 +43,7 @@ export const addProduct = async (req: Request, res: Response) => {
         })
         return;
     }catch(err){
+        console.log("ERROR : ",err)
         res.status(401).json({
             success: false,
             message: 'Error while adding new product'
