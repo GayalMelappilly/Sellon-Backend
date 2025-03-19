@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only server.ts",
-    "build": "tsc && mkdir dist\\firebase-config && copy firebase-config\\sellon-5beb3-firebase-adminsdk-fbsvc-e5a6f6c9ec.json dist\\firebase-config\\",
+    "build": "tsc",
     "start": "node dist/server.js"
   },
   "devDependencies": {
