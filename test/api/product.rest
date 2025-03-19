@@ -3,19 +3,19 @@ POST http://localhost:3000/api/v1/add-product/
 Content-Type: application/json
 
 {
-    "name": "Nike Jordan 5",
-    "description": "Nike Jordan series 5",
-    "price": 199,
-    "discount_price": 159,
-    "stock_quantity": 22,
-    "category_id": 206,
-    "brand": "Nike",
-    "sku": "eqeqwiuasdsdfoidsfxvcxvnk",
-    "weight": "0.4",
+    "name": "Arthur Morgan Action Figure",
+    "description": "Arthur Morgan from Red Redemption 2",
+    "price": 49,
+    "discount_price": null,
+    "stock_quantity": 105,
+    "category_id": 252,
+    "brand": "GMS",
+    "sku": null,
+    "weight": "0.2",
     "dimensions": null,
-    "color": ["Red", "Black", "Green"],
-    "size": ["6", "7", "8", "9"],
-    "material": null,
+    "color": ["Golden", "Black", "Normal"],
+    "size": ["Small", "Medium", "Large"],
+    "material": "Metal",
     "condition": "New",
     "status": "ACTIVE",
     "image_urls": [{
@@ -30,3 +30,6 @@ Content-Type: application/json
     "total_reviews": 20,
     "sold_count": 43
 }
+
+### Get my products
+GET http://localhost:3000/api/v1/get-my-products

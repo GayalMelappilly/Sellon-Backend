@@ -1,8 +1,52 @@
 import { Request, Response } from "express"
 import { ProductModel } from "../models/product.model"
 import client from "../config/database"
-import { addProductQuery, getCategoriesQuery, getSubcategoriesQuery } from "../query/product.query"
+import { addProductQuery, getCategoriesQuery, getMyProductsQuery, getSubcategoriesQuery } from "../query/product.query"
 import { getUserCache } from "../utils/redis"
+
+export const getCategories = async (req: Request, res: Response):Promise<void> => {
+    try {
+        const categories = await client.query(getCategoriesQuery)
+        res.status(200).json({
+            success: true,
+            categories: categories.rows
+        })
+    } catch (error) {
+        res.status(401).json({
+            success: false,
+            message: 'Error while fetching categories'
+        })
+    }
+}
+
+export const getSubcategories = async (req: Request, res: Response):Promise<void> => {
+    const id = req.params.id
+
+    try{
+        const categories = await client.query(getSubcategoriesQuery, [
+            id
+        ])
+        if (categories.rows.length === 0) {
+            res.status(200).json({
+                success: false,
+                message: 'Base category'
+            })
+            return;
+        }
+        res.status(200).json({
+            success: true,
+            categories: categories.rows
+        })
+        return;
+    }catch(err){
+        res.status(401).json({
+            success: false,
+            message: "Error while fetching categories"
+        })
+        return;
+    }
+
+}
 
 export const addProduct = async (req: Request, res: Response) => {
     
@@ -52,46 +96,24 @@ export const addProduct = async (req: Request, res: Response) => {
     
 }
 
-export const getCategories = async (req: Request, res: Response):Promise<void> => {
+export const getMyProducts = async(req: Request, res: Response) => {
+    const user = await getUserCache(req.cookies.access_token)
+    const userId = user.id
+
     try {
-        const categories = await client.query(getCategoriesQuery)
+        const products = await client.query(getMyProductsQuery, [
+            userId
+        ])
         res.status(200).json({
             success: true,
-            categories: categories.rows
+            products: products.rows,
+            message: 'Fetched my products'
         })
     } catch (error) {
+        console.log(error)
         res.status(401).json({
             success: false,
-            message: 'Error while fetching categories'
+            message: 'Error while fetching my products'
         })
     }
-}
-
-export const getSubcategories = async (req: Request, res: Response):Promise<void> => {
-    const id = req.params.id
-
-    try{
-        const categories = await client.query(getSubcategoriesQuery, [
-            id
-        ])
-        if (categories.rows.length === 0) {
-            res.status(200).json({
-                success: false,
-                message: 'Base category'
-            })
-            return;
-        }
-        res.status(200).json({
-            success: true,
-            categories: categories.rows
-        })
-        return;
-    }catch(err){
-        res.status(401).json({
-            success: false,
-            message: "Error while fetching categories"
-        })
-        return;
-    }
-
 }

@@ -12,7 +12,7 @@ userRouter.get('/verify-user-with-otp/phone_number', verifyUserWithPhoneNumber)
 userRouter.post('/login', loginUser)
 userRouter.get('/logout', isAuthenticated, logoutUser)
 userRouter.get('/get-all-users', getAllUsers)
-userRouter.get('/get-current-user', isAuthenticated, authorizeRoles('admin'), updateAccessToken, getCurrentUser)
+userRouter.get('/get-current-user', isAuthenticated, updateAccessToken, getCurrentUser)
 userRouter.put('/update-user-profile/:id', isAuthenticated, updateUserProfile) 
 
 export default userRouter
