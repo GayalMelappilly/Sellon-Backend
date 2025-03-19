@@ -3,11 +3,10 @@ import { configDotenv } from 'dotenv'
 configDotenv()
 
  const client = new Client({
-    host: 'localhost',
-    user: 'postgres',
-    port: 5432,
-    password: process.env.DB_PASSWORD || 'rootuser',
-    database: 'sellon'
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
 })
 
 export default client
