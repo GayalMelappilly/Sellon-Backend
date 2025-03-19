@@ -1,0 +1,22 @@
+export interface ProductModel {
+    name: string,
+    description?: string,
+    price: number,
+    discount_price?: number,
+    stock_quantity: number,
+    category_id: number,
+    brand: string,
+    sku?: string,
+    weight?: number,
+    dimensions?: string,
+    color?: string,
+    size?: string,
+    material?: string,
+    condition?: string,
+    status: string,
+    image_urls?: Array<string>,
+    rating?: number,
+    total_reviews?: number,
+    sold_count?: number,
+    available_from?: Date
+}

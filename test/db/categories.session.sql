@@ -1,0 +1,1 @@
+select * from categories where parent_id IS NULL;

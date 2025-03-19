@@ -100,7 +100,12 @@ export const updateTokens = async (id: string, user: UserModel, res: Response, n
 // Decode Token
 export const decodeToken = (token: string) => {
     return jwt.decode(token, {json: true})
-    
+}
+
+// Get only id from token
+export const decodeIdFromToken = (token: string) => {
+    const decodedToken = jwt.decode(token, {json: true})
+    return decodedToken?.id
 }
 
 // Verify tokens

@@ -1,0 +1,31 @@
+### Add products
+POST http://localhost:3000/api/v1/add-product/
+Content-Type: application/json
+
+{
+    "name": "Arthur Morgan Action Figure",
+    "description": "Arthur Morgan from Red Dead Redemption 2",
+    "price": 59,
+    "discount_price": 36,
+    "stock_quantity": 240,
+    "category_id": 251,
+    "brand": "Rockstar Games",
+    "sku": "eqeqwiusdfoidsfxvcxvnk",
+    "weight": "0.7",
+    "dimensions": "10 x 5 x 2 cm",
+    "color": "Golden",
+    "material": "Metal",
+    "condition": "New",
+    "status": "ACTIVE",
+    "image_urls": [{
+        "main": "main.png",
+        "views": [
+            "view1.png",
+            "view2.png",
+            "view3.png"
+        ]
+    }], 
+    "rating": null,
+    "total_reviews": null,
+    "sold_count": null
+}

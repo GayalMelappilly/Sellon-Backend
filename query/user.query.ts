@@ -8,11 +8,11 @@ export const signUpUserQuery = `
 // Login user query
 export const loginUserQuery = `
     SELECT * FROM users
-    WHERE (email = $1 OR phone_number = $1)
+    WHERE (email = $1 OR phone_number = $1);
 `
 
 export const getAllUsersQuery = `
-    SELECT * FROM users
+    SELECT * FROM users;
 `
 
 // Update user query
@@ -25,5 +25,5 @@ export const updateUserProfileQuery = `
 // Get current user
 export const getCurrentUserQuery = `
     SELECT * FROM users
-    WHERE id = $1
+    WHERE id = $1;
 `
