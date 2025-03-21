@@ -2,7 +2,6 @@
 node_modules/
 
 # Yarn
-yarn.lock
 .pnp/
 .pnp.js
 
