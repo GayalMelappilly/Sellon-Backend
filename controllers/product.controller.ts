@@ -117,3 +117,9 @@ export const getMyProducts = async(req: Request, res: Response) => {
         })
     }
 }
+
+// export const editMyProducts = async (req: Request, res: Response) => {
+//     const user = await getUserCache(req.cookies.access_token)
+//     const userId = user.id
+
+// }
